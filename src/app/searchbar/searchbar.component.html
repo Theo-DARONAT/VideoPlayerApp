@@ -1,0 +1,5 @@
+<input type="text" [(ngModel)]="videoLink">
+<button (click)="searchVideo()">Search</button>
+<div class="errorMessage">
+    <p *ngIf="isNotValidLink">This is not a valid link!</p>
+</div>

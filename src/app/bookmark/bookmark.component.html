@@ -1,0 +1,11 @@
+<button (click)="addBookmarks()">add to bookmarks</button>
+<button (click)="showBookmarks()">show bookmarks</button>
+
+<div *ngIf="show">
+    <h1>Bookmarks:</h1>
+    <ul>
+        <li *ngFor="let book of data.getBookmarks()">
+            <p><a href="#" (click)="selectVideo(book)">{{book.link}}</a></p>
+        </li>
+    </ul>
+</div>
