@@ -19,10 +19,12 @@ export class BookmarkComponent implements OnInit {
     this.data.updateBookmarks();
   }
 
+  // Add the current video to bookmarks.
   addBookmarks() : void {
       const currentLink = this.data.getCurrentLink();
       if (currentLink != null){
         let isAlreadyAdded = false;
+        // If the link is already persent in bookmarks, don't add it again.
         this.data.getBookmarks().forEach(link => {
           if (link.link == currentLink)
             isAlreadyAdded = true;
@@ -33,13 +35,21 @@ export class BookmarkComponent implements OnInit {
     }
   }
 
+  // Show or hide bookmarks
   showBookmarks(): void {
     this.show = !this.show;
   }
 
+
+  // Search the video with the link that the user clicks on
   selectVideo(bookmark: DataStructure) : void{
     const params = new URL(bookmark.link).searchParams;
     this.currentVideoId = params.get('v');
+    // Update current link, but useless because
+    // it is only used to add bookmarks and a link
+    // cannot be twice in the bookmarks.
+    this.data.setCurrentLink(bookmark.link);
+    // Output video id (see app.component.ts)
     this.bookmarkEvent.emit(this.currentVideoId);
   }
 

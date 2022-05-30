@@ -18,10 +18,14 @@ export class HistoryComponent implements OnInit {
     this.data.updateHistory();
   }
 
+  // Search the video with the link that the user clicks on
+  // The link is not added to history, I think it's useless
   selectVideo(history: DataStructure) : void{
     const params = new URL(history.link).searchParams;
     this.currentVideoId = params.get('v');
+    // Set the current video link (Use for bookmark)
     this.data.setCurrentLink(history.link);
+    // Output video id (see app.component.ts)
     this.historyEvent.emit(this.currentVideoId);
   }
 

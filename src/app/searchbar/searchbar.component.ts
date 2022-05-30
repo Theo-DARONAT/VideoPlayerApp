@@ -20,18 +20,26 @@ export class SearchbarComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  // Search a video with the link given in the textbox.
   searchVideo() : void {
-    const params = new URL(this.videoLink).searchParams;
+    const videoUrl = new URL(this.videoLink);
+    const params = videoUrl.searchParams;
     this.currentVideoId = params.get('v');
     
+    // Check if the given link is not a valid youtube video link.
+    // we want to display a message when the link is wrong.
     this.isNotValidLink = (this.currentVideoId == null);
+
     if (!this.isNotValidLink){
+      // Add link to history data
       this.data.addHistory(this.videoLink);
+      // Set the current link (Used for bookmarks)
       this.data.setCurrentLink(this.videoLink);
       this.sendVideoId();
     }
   }
 
+  // Output the video id (See app.component.ts)
   sendVideoId() : void {
     this.videoIdEvent.emit(this.currentVideoId);
   }

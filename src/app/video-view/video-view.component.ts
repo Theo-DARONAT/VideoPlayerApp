@@ -13,6 +13,7 @@ export class VideoViewComponent implements OnInit {
 
   constructor() { }
 
+  // Load the API when we start the application
   ngOnInit(): void {
     if(!this.apiLoaded) {
       const tag = document.createElement('script');
