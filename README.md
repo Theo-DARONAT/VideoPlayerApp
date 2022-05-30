@@ -12,6 +12,6 @@ Now you can go to the next step.
 
 Run the following command: ng serve
 If you want to use all functionalities of this applciation, you have to start
-the server. You can download it at the [following git](git@github.com:Theo-DARONAT/VideoPlayerServer.git)
+the server. You can download it at the following [git](https://github.com/Theo-DARONAT/VideoPlayerServer.git)
 
 Thank you for using my app !
