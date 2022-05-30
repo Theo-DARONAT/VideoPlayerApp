@@ -8,7 +8,7 @@ You have to install the node package.
 For this, run the following command: npm install --save node
 Now you can go to the next step.
 
-# How start the application
+# How to start the application
 
 Run the following command: ng serve
 If you want to use all functionalities of this applciation, you have to start
