@@ -1,15 +1,21 @@
-<h1 [style.color]="color"> {{title}} </h1>
-
-<app-searchbar class="searchBar" (videoIdEvent)="setCurrentVideoId($event)">
-
-</app-searchbar>
-
-<app-video-view class="videoView" [videoId]="currentVideoId"></app-video-view> 
-
-<app-history (historyEvent)="setCurrentVideoId($event)">
-
-</app-history>
-
-<app-bookmark (bookmarkEvent)="setCurrentVideoId($event)">
-
-</app-bookmark>
+<div class="flex-container">
+    <div>
+        <h1 [style.color]="color"> {{title}} </h1>
+    </div>
+    <div class="flex-container-main">
+        <div>
+            <app-history (historyEvent)="setCurrentVideoId($event)"></app-history>
+        </div>
+        <div class="flex-container-video">
+            <div>
+                <app-searchbar class="searchBar" (videoIdEvent)="setCurrentVideoId($event)"></app-searchbar>
+            </div>
+            <div>
+                <app-video-view class="videoView" [videoId]="currentVideoId"></app-video-view> 
+            </div>
+        </div>
+        <div>
+            <app-bookmark (bookmarkEvent)="setCurrentVideoId($event)"></app-bookmark>
+        </div>    
+    </div>
+</div>

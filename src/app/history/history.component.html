@@ -1,7 +1,7 @@
 <h1>History:</h1>
 
 <ul>
-    <li *ngFor="let h of data.getHistory()">
+    <li *ngFor="let h of data.getHistory().reverse()">
         <p><a href="#" (click)="selectVideo(h)">{{h.link}}</a></p>
     </li>
 </ul>
