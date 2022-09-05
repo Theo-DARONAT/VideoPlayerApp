@@ -3,8 +3,9 @@ import { catchError, Observable } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 
-import { DataList, DataStructure } from './data-structure';
+import { DataList, DataStructure, DataManager } from './data-structure';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +13,25 @@ import { DataList, DataStructure } from './data-structure';
 export class DataService {
 
   // Base URL
-  bookmarkUrl = 'http://localhost:8000/bookmark';
-  historyUrl = 'http://localhost:8000/history';
+  private bookmarkUrl = 'http://localhost:8000/bookmark';
+  private historyUrl = 'http://localhost:8000/history';
 
-  history: any = [];
+  private _dataManager = new BehaviorSubject<DataManager>({
+	  history: [];
+	  bookmarks: [];
+ 	 
+  });
+	  
+  // history: any = [];
+  // bookmarks: any = [];
 
-  bookmarks: any = [];
+  getDataManager(): Observable<DataManager>{
+  	return this._dataManager;
+  }
+
+  setDataManager(latestValue: DataManager){
+  	return this._dataManager.next(latestValue);
+  }
 
   // Current video link (Used in bookmarks)
   currentLink: any = null;
@@ -45,16 +59,18 @@ export class DataService {
   getRequestConvert(url: string, name: string, isHistory: boolean) : void {
     this.getRequest(url).subscribe((data) => {
       if (isHistory)
-        this.history = data;
+	      let dataManager = {history: data, bookmarks = getDataManager().bookmarks}
+        // this.history = data;
       else
-        this.bookmarks = data;
+	      let dataManager = {hisposty: getDataManager().history , bookmarks = data}
+        // this.bookmarks = data;
     },
     (err: HttpErrorResponse) => {
       if (err.error instanceof Error) {
         console.log('[DataService] get' + name + ' error occured.');
       } else {
         console.log('[server] get' + name + ' error occured.');
-      }
+      } // TODO read .cache
     });
   }
   
@@ -77,12 +93,12 @@ export class DataService {
    *  Return the history list.
    */
   getHistory() : DataStructure[] {
-    return this.history;
+    return this._dataManager.history;
   }
 
   // Return the bookmarks list.
   getBookmarks() : DataStructure[] {
-    return this.bookmarks;
+    return this._dataManager.bookmarks;
   }
   
 
@@ -98,8 +114,25 @@ export class DataService {
     
     this.http.post<any>(this.historyUrl + "/add", val, {headers: headers}).subscribe(data =>{
       this.updateHistory();
-    });
-    
+    }, // TODO cache file										    
+    (err: HttpErrorResponse) => {
+      if (err.error instanceof Error) {
+        console.log('[DataService] post history error occured.');
+      } else {
+        console.log('[server] get history error occured.');
+      }
+
+      // TODO write in a file and update history list.
+
+      // check if .cache directory exist.
+
+      const dir = './.cache';
+      if (!existsSync(dir)){
+        mkdirSync(dir);
+      }
+
+      writeFileSync(join(dir, 'cache-history'), newLink, {flag: 'a+'});
+      history.unshift(newLink);
   }
 
   // Add link to the bookmarks by sending a post request

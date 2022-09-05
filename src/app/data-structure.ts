@@ -5,3 +5,8 @@ export interface DataStructure {
 export interface DataList {
     linkList : DataStructure[];
 };
+
+export interface DataManager {
+	history: any;
+	bookmarks: any;
+};
