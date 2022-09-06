@@ -3,7 +3,6 @@ import { catchError, Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
-// import { writeFileSync } from 'fs';
 
 import { DataList, DataStructure, DataManager } from './data-structure';
 
