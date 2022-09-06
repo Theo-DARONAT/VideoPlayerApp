@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { catchError, Observable } from 'rxjs';
+import { catchError, Observable, BehaviorSubject } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { HttpErrorResponse } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
+import * as fs from 'fs';
 
 import { DataList, DataStructure, DataManager } from './data-structure';
 
@@ -17,8 +17,8 @@ export class DataService {
   private historyUrl = 'http://localhost:8000/history';
 
   private _dataManager = new BehaviorSubject<DataManager>({
-	  history: [];
-	  bookmarks: [];
+	  history: [],
+	  bookmarks: []
  	 
   });
 	  
@@ -59,10 +59,10 @@ export class DataService {
   getRequestConvert(url: string, name: string, isHistory: boolean) : void {
     this.getRequest(url).subscribe((data) => {
       if (isHistory)
-	      let dataManager = {history: data, bookmarks = getDataManager().bookmarks}
+	      this.setDataManager({history: data, bookmarks = this._dataManager.getValue().bookmarks});
         // this.history = data;
       else
-	      let dataManager = {hisposty: getDataManager().history , bookmarks = data}
+	      this.setDataManager({history: this._dataManager.getValue().history , bookmarks = data});
         // this.bookmarks = data;
     },
     (err: HttpErrorResponse) => {
@@ -93,12 +93,12 @@ export class DataService {
    *  Return the history list.
    */
   getHistory() : DataStructure[] {
-    return this._dataManager.history;
+    return this._dataManager.getValue().history;
   }
 
   // Return the bookmarks list.
   getBookmarks() : DataStructure[] {
-    return this._dataManager.bookmarks;
+    return this._dataManager.getValue().bookmarks;
   }
   
 
@@ -127,12 +127,16 @@ export class DataService {
       // check if .cache directory exist.
 
       const dir = './.cache';
-      if (!existsSync(dir)){
-        mkdirSync(dir);
+      if (!fs.existsSync(dir)){
+        fs.mkdirSync(dir);
       }
 
-      writeFileSync(join(dir, 'cache-history'), newLink, {flag: 'a+'});
-      history.unshift(newLink);
+      fs.writeFileSync(join(dir, 'cache-history'), newLink, {flag: 'a+'});
+      tmpHistory = this._dataManager.getValue().history;
+      tmpHistory.unshift(newLink);
+      tmpBookmarks = this._dataManager.getValue().bookmarks;
+      this.setDataManager({history: tmpHistor, bookmarks: tmpBookmarks});
+    };
   }
 
   // Add link to the bookmarks by sending a post request
